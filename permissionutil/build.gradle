@@ -1,0 +1,65 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+
+//要上传的仓库地址
+def MAVEN_LOCAL_PATH ='http://localhost:8082/nexus/content/repositories/releases/'
+//artifaceID
+def ARTIFACT_ID = 'sdklib'
+//version
+def VERSION_NAME = '1.0.3'
+groupID
+def GROUP_ID = 'com.park.sdk'
+//仓库的账户
+def USERNAME='admin'
+//对应的密码
+def PASSWORD='admin123'
+
+
+
+uploadArchives {
+    repositories.mavenDeployer {
+        def deployPath=file(getProperty('arr.permissionutil'))
+            repository(url: "file://${deployPath.absolutePath}") {
+
+            pom.project {
+                groupId "com.lxc"
+                artifactId "permissionutil"
+                version 1.0
+                packaging 'aar'
+                description 'lib for onesdk'
+            }
+
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    testCompile 'junit:junit:4.12'
+}
